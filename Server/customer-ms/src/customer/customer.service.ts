@@ -9,18 +9,30 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Customer } from './customer.entity';
 import { CustomerDto } from './dto/customer.dto';
+import { RabbitMQService } from 'src/rabbitmq/rabbitmq.service';
 
 @Injectable()
 export class CustomerService {
     constructor(
         @InjectRepository(Customer)
         private readonly repo: Repository<Customer>,
+        private readonly rabbitMQService: RabbitMQService,
     ) { }
 
-    create(dto: CustomerDto) {
-        const customer = this.repo.create(dto);
-        return this.repo.save(customer);
-    }
+    // create(dto: CustomerDto) {
+    //     const customer = this.repo.create(dto);
+    //     return this.repo.save(customer);
+    // }
+
+    async create(dto: CustomerDto) {
+    const customer = this.repo.create(dto);
+    const savedCustomer = await this.repo.save(customer);
+
+    // Send to RabbitMQ after saving
+    await this.rabbitMQService.publishCustomerCreatedEvent(savedCustomer);
+
+    return savedCustomer;
+}
 
     findAll() {
         return this.repo.find();

@@ -29,17 +29,24 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { OrderModule } from './order/order.module';
 import { ProductModule } from './product/product.module';
+import { CartModule } from './cart/cart.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     // PostgreSQL config
+
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'root', // 🔁 Change to your actual password
-      database: 'product_order_db',
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT || '5432', 10),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
       autoLoadEntities: true,
       synchronize: true,
     }),
@@ -50,7 +57,7 @@ import { ProductModule } from './product/product.module';
         name: 'CUSTOMER_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://localhost:5672'],
+          urls: [process.env.RABBITMQ_URL || 'amqp://guest:guest@rabbitmq:5672'],
           queue: 'customer_queue',
           queueOptions: { durable: false },
         },
@@ -60,6 +67,8 @@ import { ProductModule } from './product/product.module';
     OrderModule,
 
     ProductModule,
+
+    CartModule,
   ],
   controllers: [AppController],
   providers: [AppService],

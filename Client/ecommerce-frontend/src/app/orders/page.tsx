@@ -210,7 +210,7 @@ export default function OrdersPage() {
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <Headers />
-      <h1 className="text-3xl font-bold mb-6">📦 Order History</h1>
+      <h1 className="text-3xl font-bold mb-6 mt-5">📦 Order History</h1>
       {orders.length === 0 ? (
         <p>No orders found.</p>
       ) : (

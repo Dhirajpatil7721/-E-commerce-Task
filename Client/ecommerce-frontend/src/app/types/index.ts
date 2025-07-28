@@ -18,3 +18,9 @@ export interface Customer {
   mobile: number;
 }
 
+export interface Cart {
+  id: number;
+  customerId: number;
+  productId: number;
+  quantity: number;
+}

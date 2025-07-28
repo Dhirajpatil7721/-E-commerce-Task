@@ -24,7 +24,7 @@ import { ParseIntPipe } from '@nestjs/common';
 
 @Controller('customer')
 export class CustomerController {
-  constructor(private readonly service: CustomerService) { }
+  constructor(private readonly service: CustomerService) {}
 
   @Post()
   create(@Body() dto: CustomerDto) {
@@ -36,32 +36,18 @@ export class CustomerController {
     return this.service.findAll();
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: number) {
-  //   return this.service.findOne(id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: number, @Body() dto: CustomerDto) {
-  //   return this.service.update(id, dto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: number) {
-  //   return this.service.remove(id);
-  // }
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  findOne(@Param('id') id: number) {
     return this.service.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() dto: CustomerDto) {
+  update(@Param('id') id: number, @Body() dto: CustomerDto) {
     return this.service.update(id, dto);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
+  remove(@Param('id') id: number) {
     return this.service.remove(id);
   }
 }
