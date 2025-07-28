@@ -9,7 +9,7 @@ export class CartRabbitMQConsumer implements OnModuleInit {
   constructor(private readonly cartService: CartService) {}
 
   async onModuleInit() {
-    const connection = await connect('amqp://localhost');
+    const connection = await connect('amqp://guest:guest@rabbitmq:5672');
     this.channel = await connection.createChannel();
     await this.channel.assertQueue('customer_created');
 
